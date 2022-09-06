@@ -10,7 +10,7 @@ terraform {
 }
 
 provider "aws" {
-  region  = "ap-southeast-2"
+  region = "ap-southeast-2"
 }
 
 resource "aws_security_group_rule" "allow_80" {
@@ -18,7 +18,7 @@ resource "aws_security_group_rule" "allow_80" {
   from_port         = 80
   to_port           = 80
   protocol          = "tcp"
-  security_group_id = "sg-da83229f"
+  security_group_id = "sg-0bdcae8a706949a99"
   cidr_blocks       = ["0.0.0.0/0"]
 }
 
@@ -27,7 +27,7 @@ resource "aws_security_group_rule" "allow_8080" {
   from_port         = 8080
   to_port           = 8080
   protocol          = "tcp"
-  security_group_id = "sg-da83229f"
+  security_group_id = "sg-0bdcae8a706949a99"
   cidr_blocks       = ["0.0.0.0/0"]
 }
 
@@ -38,37 +38,37 @@ resource "aws_key_pair" "deployer" {
 
 data "aws_ami" "image_packer-shell" {
   most_recent = true
-  owners = ["self"]
+  owners      = ["self"]
   filter {
-    name = "tag:Base_AMI_Name"
+    name   = "tag:Base_AMI_Name"
     values = ["jiangren-packer-demo-1"]
   }
 }
 
 data "aws_ami" "image_packer-ansible" {
   most_recent = true
-  owners = ["self"]
+  owners      = ["self"]
   filter {
-    name = "tag:Base_AMI_Name"
+    name   = "tag:Base_AMI_Name"
     values = ["jiangren-packer-demo-2"]
   }
 }
 
 resource "aws_instance" "packer-shell" {
-  ami           = "${data.aws_ami.image_packer-shell.id}"
+  ami           = data.aws_ami.image_packer-shell.id
   instance_type = "t2.micro"
-  key_name = "${aws_key_pair.deployer.key_name}"
+  key_name      = aws_key_pair.deployer.key_name
 
   tags = {
-    Name = "shell"
+    Name    = "shell"
     Project = "JRAnsible"
   }
 }
 
 resource "aws_instance" "packer-ansible" {
-  ami           = "${data.aws_ami.image_packer-ansible.id}"
+  ami           = data.aws_ami.image_packer-ansible.id
   instance_type = "t2.micro"
-  key_name = "${aws_key_pair.deployer.key_name}"
+  key_name      = aws_key_pair.deployer.key_name
 
   user_data = <<EOD
 #!/bin/bash
@@ -94,7 +94,7 @@ EOF
 EOD
 
   tags = {
-    Name = "ansible"
+    Name    = "ansible"
     Project = "JRAnsible"
   }
 }
