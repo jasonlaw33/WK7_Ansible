@@ -18,9 +18,6 @@ pipeline {
     stages {
         stage('Packer Shell') {
             when {expression{return params.blPackerShell}}
-			agent {
-                docker { image 'hashicorp/packer:latest' }
-            }
             steps {
                 withAWS(credentials: 'AWS', region: 'ap-southeast-2') {
                     // some block
