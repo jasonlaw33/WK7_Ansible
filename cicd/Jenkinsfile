@@ -34,9 +34,6 @@ pipeline {
         }
         stage('Packer Ansible') {
             when {expression{return params.blPackerAnsible}}
-			agent {
-                docker { image 'hashicorp/packer:latest' }
-            }
             steps {
                 withAWS(credentials: 'AWS', region: 'ap-southeast-2') {
                     // some block
@@ -53,9 +50,6 @@ pipeline {
         }
         stage('Launch Instances') {
             when {expression{return params.blApplyAWS}}
-			agent {
-				docker { image 'hashicorp/terraform:latest' }  
-            }
             steps {
                 withAWS(credentials: 'AWS', region: 'ap-southeast-2') {
                     // some block
