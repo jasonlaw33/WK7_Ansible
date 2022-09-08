@@ -13,6 +13,15 @@ provider "aws" {
   region = "ap-southeast-2"
 }
 
+resource "aws_security_group_rule" "allow_22" {
+  type              = "ingress"
+  from_port         = 22
+  to_port           = 22
+  protocol          = "tcp"
+  security_group_id = "sg-0bdcae8a706949a99"
+  cidr_blocks       = ["0.0.0.0/0"]
+}
+
 resource "aws_security_group_rule" "allow_80" {
   type              = "ingress"
   from_port         = 80
